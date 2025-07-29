@@ -20,8 +20,8 @@ This application requires two API keys:
 
 **Windows (PowerShell):**
 ```powershell
-$env:VIDEODB_API_KEY="sk-dHWGyJA7BJ_3j2DHR7pzrtf3z6AnGllzciooMTS7URc"
-$env:GEMINI_API_KEY="AIzaSyA0VHjInnHnOw7deFZqbx7XSir2wrCci0c"
+$env:VIDEODB_API_KEY="your_videodb_key_here"
+$env:GEMINI_API_KEY="your_gemini_key_here"
 ```
 
 **Windows (Command Prompt):**
