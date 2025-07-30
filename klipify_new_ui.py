@@ -20,14 +20,15 @@ if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
 
 # Import our modular components
-from src.ui.new_components import (
+from src.ui.ui_components import (
     load_modern_css, 
     create_landing_page, 
     create_sidebar_navigation,
     show_clips_page,
     show_summary_page, 
     show_notes_page,
-    show_chat_page
+    show_chat_page,
+    show_my_videos_page
 )
 from src.ui.displays import display_error_state
 from src.services.video_service import initialize_videodb_client
@@ -80,15 +81,19 @@ def show_landing_page():
         display_error_state()
         return
     
+    # Check if user clicked a quick action button
+    if st.session_state.get('current_page') in ["My Videos", "Clips", "Summary", "Chat"]:
+        # If user has video data, show the dashboard
+        if st.session_state.get('video_data'):
+            show_dashboard_with_sidebar()
+            return
+        else:
+            # If no video data, show message and reset to landing
+            st.warning("Please process a video first before accessing this feature.")
+            st.session_state.current_page = None
+    
     # Create the landing page
     youtube_url, process_button = create_landing_page()
-    
-    # Show video enhancement notice
-    st.info("""
-    🎯 **Enhanced Video Technology**: This version uses VideoDB Timeline API for improved clip generation and playback compatibility.
-    📹 **Better Clips**: More reliable video streams with multiple quality options and fallback methods.
-    🔧 **Troubleshooting**: If clips don't play directly, we provide VLC instructions and alternative players.
-    """)
     
     # Handle video processing
     if process_button and youtube_url:
@@ -111,6 +116,8 @@ def show_dashboard_with_sidebar():
         show_notes_page(video_data)
     elif current_page == "Chat":
         show_chat_page(video_data)
+    elif current_page == "My Videos":
+        show_my_videos_page()
 
 
 def process_video(youtube_url):

@@ -50,7 +50,7 @@ class VideoFormatHandler:
     
     @staticmethod
     def display_video_player(stream_url, clip_title, clip_index):
-        """Display a video player with enhanced fallback options."""
+        """Display a video player with enhanced HLS support and fallback options."""
         
         if not stream_url:
             st.error("❌ No stream URL available")
@@ -62,46 +62,110 @@ class VideoFormatHandler:
         is_timeline_based = 'timeline' in stream_url.lower() or 'videodb.io' in stream_url
         
         if is_timeline_based:
-            st.info("✨ Timeline-based clip - Enhanced compatibility")
+            st.success("✨ Timeline-based clip - Enhanced compatibility")
         
-        # Try multiple approaches for video playback
-        playback_success = False
-        
-        # Method 1: Try Streamlit's native video player
+        # Enhanced HLS player using video.js
         try:
-            st.video(stream_url)
-            st.success("✅ Video loaded successfully!")
-            playback_success = True
+            # Create a custom HTML5 video player with HLS.js support
+            video_html = f"""
+            <div style="width: 100%; max-width: 800px; margin: 0 auto;">
+                <video 
+                    id="video_{clip_index}"
+                    controls 
+                    preload="metadata"
+                    style="width: 100%; height: 400px; background: #000;"
+                    crossorigin="anonymous">
+                    <source src="{stream_url}" type="application/x-mpegURL">
+                    <p style="color: #fff; text-align: center; padding: 20px;">
+                        Your browser doesn't support HLS playback. 
+                        <a href="{stream_url}" style="color: #2563eb;">Click here to download</a>
+                    </p>
+                </video>
+                
+                <script src="https://vjs.zencdn.net/8.0.4/video.min.js"></script>
+                <script src="https://vjs.zencdn.net/ie8/1.1.4/videojs-ie8.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+                
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {{
+                    const video = document.getElementById('video_{clip_index}');
+                    const videoSrc = '{stream_url}';
+                    
+                    if (Hls.isSupported()) {{
+                        const hls = new Hls({{
+                            enableWorker: true,
+                            lowLatencyMode: true,
+                            backBufferLength: 90
+                        }});
+                        hls.loadSource(videoSrc);
+                        hls.attachMedia(video);
+                        
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {{
+                            console.log('HLS manifest loaded successfully');
+                        }});
+                        
+                        hls.on(Hls.Events.ERROR, function(event, data) {{
+                            console.error('HLS error:', data);
+                            if (data.fatal) {{
+                                switch(data.type) {{
+                                    case Hls.ErrorTypes.NETWORK_ERROR:
+                                        console.log('Network error - trying to recover');
+                                        hls.startLoad();
+                                        break;
+                                    case Hls.ErrorTypes.MEDIA_ERROR:
+                                        console.log('Media error - trying to recover');
+                                        hls.recoverMediaError();
+                                        break;
+                                    default:
+                                        console.log('Fatal error - cannot recover');
+                                        hls.destroy();
+                                        break;
+                                }}
+                            }}
+                        }});
+                    }} else if (video.canPlayType('application/vnd.apple.mpegurl')) {{
+                        // Native HLS support (Safari)
+                        video.src = videoSrc;
+                    }} else {{
+                        console.error('HLS not supported');
+                    }}
+                }});
+                </script>
+                
+                <link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet">
+            </div>
+            """
+            
+            st.markdown(video_html, unsafe_allow_html=True)
+            
+            # Add a small delay and check message
+            st.info("🔄 Loading video... If it doesn't play, try the alternatives below.")
+            
         except Exception as e:
-            st.warning(f"⚠️ Direct playback failed: {str(e)}")
+            st.error(f"❌ Video player failed to load: {str(e)}")
         
-        # Method 2: If direct playback fails, try iframe embedding
-        if not playback_success:
-            try:
-                # For VideoDB streams, try iframe approach
-                iframe_html = f"""
-                <iframe 
-                    src="{stream_url}" 
-                    width="100%" 
-                    height="400" 
-                    frameborder="0" 
-                    allowfullscreen>
-                </iframe>
-                """
-                st.markdown(iframe_html, unsafe_allow_html=True)
-                st.info("🔄 Attempting iframe playback...")
-                playback_success = True
-            except Exception as e:
-                st.warning(f"Iframe playback also failed: {str(e)}")
-        
-        # Method 3: Show alternatives if all else fails
-        if not playback_success:
-            VideoFormatHandler._show_playback_alternatives(stream_url)
-        else:
-            # Show URL for manual access
-            with st.expander("🔗 Stream URL (for manual access)"):
-                st.code(stream_url, language=None)
-                st.markdown("Copy this URL to play in VLC or other compatible players.")
+        # Always provide fallback options
+        with st.expander("🔧 Alternative Viewing Options"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**🎮 VLC Media Player**")
+                st.markdown("1. Copy the URL below")
+                st.markdown("2. Open VLC → Media → Open Network Stream")
+                st.markdown("3. Paste URL and play")
+                st.link_button("📥 Download VLC", "https://www.videolan.org/vlc/", use_container_width=True)
+            
+            with col2:
+                st.markdown("**🌐 Online HLS Player**")
+                st.markdown("Use a web-based HLS player:")
+                st.link_button("🔗 HLS.js Player", "https://hls-js.netlify.app/demo/", use_container_width=True)
+            
+            st.markdown("**Stream URL:**")
+            st.code(stream_url, language="text")
+            
+            if st.button(f"📋 Copy URL", key=f"copy_url_{clip_index}"):
+                st.session_state[f'copied_stream_{clip_index}'] = stream_url
+                st.success("✅ URL copied to session! Use Ctrl+C to copy from the code box above.")
     
     @staticmethod
     def _show_playback_alternatives(stream_url):
@@ -217,6 +281,25 @@ class VideoFormatHandler:
                 clip_data.get('concept', 'Video Clip'),
                 id(clip_data)
             )
+
+
+def display_video_player(clip):
+    """Simple function to display video player for clips (used by UI components)."""
+    stream_url = clip.get('timeline_url') or clip.get('stream_url')
+    clip_title = clip.get('concept', clip.get('title', 'Video Clip'))
+    clip_index = id(clip) % 1000  # Simple unique ID
+    
+    if stream_url:
+        VideoFormatHandler.display_video_player(stream_url, clip_title, clip_index)
+    else:
+        st.error("❌ No video URL available for this clip")
+
+
+def create_youtube_link(youtube_id, start_time=0):
+    """Create a YouTube link with timestamp."""
+    if not youtube_id:
+        return "#"
+    return f"https://www.youtube.com/watch?v={youtube_id}&t={int(start_time)}s"
     
     @staticmethod
     def _show_conversion_help(stream_url):
