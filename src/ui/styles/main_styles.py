@@ -52,6 +52,8 @@ def load_modern_css():
     /* Professional color palette */
     :root {
         --primary-blue: #2563eb;
+        --primary-blue-light: #dbeafe;
+        --primary-blue-dark: #1d4ed8;
         --secondary-blue: #1e40af;
         --dark-bg: #1f2937;
         --darker-bg: #111827;
@@ -455,19 +457,23 @@ def load_modern_css():
     
     /* Input and button styling */
     .stTextInput > div > div > input {
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding and border are included in the width */
         border: 1px solid var(--border-color);
         background: var(--dark-bg);
         color: var(--text-primary);
         padding: 0.75rem;
         font-size: 0.875rem;
     }
-    
+
     .stTextInput > div > div > input:focus {
         border-color: var(--primary-blue);
         outline: none;
     }
-    
+
     .stButton > button {
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding and border are included in the width */
         border: 1px solid var(--border-color);
         background: var(--primary-blue);
         color: white;
@@ -501,11 +507,11 @@ def load_modern_css():
         box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2) !important;
     }
     
-    /* Remove default Streamlit styling */
+    /* Remove default Streamlit styling - but preserve toolbar */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
-    .stDeployButton {display: none;}
+    /* header {visibility: hidden;} - Commented out to preserve toolbar */
+    /* .stDeployButton {display: none;} - Commented out to preserve deploy button */
     
     /* Professional sidebar with reduced padding */
     .css-1d391kg, [data-testid="stSidebar"] {
@@ -538,6 +544,102 @@ def load_modern_css():
     
     .css-1d391kg::-webkit-scrollbar-thumb:hover {
         background: var(--primary-blue);
+    }
+    
+    /* Notes page specific styling */
+    .section-header {
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-blue);
+    }
+    
+    .section-header h3 {
+        color: var(--text-primary);
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+    
+    .notes-content {
+        background: var(--surface-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        line-height: 1.6;
+        color: var(--text-primary);
+    }
+    
+    .search-results-info {
+        background: var(--primary-blue-light);
+        border: 1px solid var(--primary-blue);
+        border-radius: 6px;
+        padding: 0.75rem;
+        margin: 1rem 0;
+        color: var(--primary-blue);
+        font-weight: 500;
+    }
+    
+    .search-no-results {
+        background: var(--surface-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem;
+        margin: 1rem 0;
+        color: var(--text-secondary);
+        text-align: center;
+    }
+    
+    .transcript-segment {
+        background: var(--surface-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin: 1rem 0;
+        padding: 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .transcript-segment:hover {
+        border-color: var(--primary-blue);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    }
+    
+    .segment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .segment-time {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: var(--primary-blue);
+        background: var(--primary-blue-light);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+    
+    .time-link {
+        color: var(--primary-blue) !important;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        transition: color 0.2s ease;
+    }
+    
+    .time-link:hover {
+        color: var(--primary-blue-dark) !important;
+        text-decoration: underline;
+    }
+    
+    .segment-text {
+        color: var(--text-primary);
+        line-height: 1.6;
+        font-size: 0.95rem;
     }
     
     </style>

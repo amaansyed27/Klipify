@@ -45,9 +45,14 @@ def show_notes_page(video_data):
         </div>
         """, unsafe_allow_html=True)
         
+        # Clean and escape the notes content to prevent HTML rendering issues
+        import html
+        clean_notes = html.escape(notes) if notes else ""
+        clean_notes = clean_notes.replace('\\n', '<br>')
+        
         st.markdown(f"""
         <div class="notes-content">
-            {notes}
+            {clean_notes}
         </div>
         """, unsafe_allow_html=True)
         
@@ -75,12 +80,30 @@ def show_notes_page(video_data):
 
 def _show_transcript_section(transcript_segments, youtube_id):
     """Display the interactive transcript with search functionality."""
-    # Search functionality
-    col1, col2 = st.columns([3, 1])
+    # Enhanced search functionality with better UX
+    st.markdown("""
+    <div class="section-header">
+        <h4>🔍 Search & Navigation</h4>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([2.5, 1, 0.5])
     with col1:
-        search_term = st.text_input("🔍 Search transcript...", placeholder="Find specific content in the video")
+        search_term = st.text_input(
+            "🔍 Search transcript...", 
+            placeholder="Find specific content in the video",
+            help="Search through all transcript segments to find specific topics or keywords"
+        )
     with col2:
-        segments_per_page = st.selectbox("Segments per page", [10, 25, 50, 100], index=1)
+        segments_per_page = st.selectbox(
+            "Segments per page", 
+            [10, 25, 50, 100], 
+            index=1,
+            help="Number of transcript segments to display per page"
+        )
+    with col3:
+        if st.button("🗑️ Clear", help="Clear search and show all segments"):
+            st.rerun()
     
     # Filter segments based on search
     if search_term:
@@ -136,6 +159,10 @@ def _show_transcript_section(transcript_segments, youtube_id):
         start_time = segment.get('start', 0)
         text = segment.get('text', '')
         
+        # Clean and escape text content to prevent HTML issues
+        import html
+        clean_text = html.escape(text) if text else ""
+        
         # Create YouTube link with timestamp
         youtube_url = create_youtube_link(youtube_id, start_time) if youtube_id else None
         
@@ -145,7 +172,17 @@ def _show_transcript_section(transcript_segments, youtube_id):
                 <span class="segment-time">{_format_timestamp(start_time)}</span>
                 {f'<a href="{youtube_url}" target="_blank" class="time-link">🔗 Jump to time</a>' if youtube_url else ''}
             </div>
-            <div class="segment-text">{text}</div>
+            <div class="segment-text">{clean_text}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Show results summary
+    if total_pages > 1 or search_term:
+        st.markdown(f"""
+        <div class="search-results-info">
+            📊 Showing {len(current_segments)} of {len(filtered_segments)} segments
+            {f' | 🔍 Filtered by: "{search_term}"' if search_term else ''}
+            {f' | 📄 Page {st.session_state.transcript_page + 1} of {total_pages}' if total_pages > 1 else ''}
         </div>
         """, unsafe_allow_html=True)
 

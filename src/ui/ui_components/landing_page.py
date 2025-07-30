@@ -70,9 +70,11 @@ def create_landing_page():
     
     # Professional input section
     st.markdown("### Video Processing")
-    
-    col1, col2 = st.columns([4, 1])
-    
+
+    # --- CHANGE THIS LINE ---
+    # Give both columns an equal width ratio to make the elements the same size.
+    col1, col2 = st.columns(2) 
+
     with col1:
         youtube_url = st.text_input(
             "YouTube URL",
@@ -80,14 +82,14 @@ def create_landing_page():
             help="Paste any educational YouTube video URL for AI analysis",
             label_visibility="collapsed"
         )
-    
+
     with col2:
         process_button = st.button(
             "▶ Process", 
             type="primary", 
-            use_container_width=True
+            use_container_width=True  # This correctly makes the button fill its column
         )
-    
+
     return youtube_url, process_button
 
 
