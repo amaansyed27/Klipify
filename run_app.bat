@@ -1,6 +1,6 @@
 @echo off
-echo 🧠 AI Tutor - Instant Educational Shorts Generator
-echo ================================================
+echo 🎬 Klipify - AI Educational Video Platform
+echo ==========================================
 
 echo.
 echo 🔍 Checking Python installation...
@@ -28,16 +28,19 @@ echo ✅ Dependencies installed!
 
 echo.
 echo 🔧 Setting up configuration...
-echo Make sure to set your GEMINI_API_KEY environment variable!
+echo Make sure to configure your API keys in .streamlit/secrets.toml
+echo VIDEODB_API_KEY and GEMINI_API_KEY are required
 python setup.py
 
 echo.
-echo 🚀 Starting AI Tutor application...
+echo 🚀 Starting Klipify application...
 echo.
 echo 🌐 Your app will open in your default browser
 echo 🛑 Press Ctrl+C to stop the application
 echo.
+echo 🎯 Transform educational videos into comprehensive learning experiences!
+echo.
 
-streamlit run ai_tutor_app.py
+streamlit run klipify_main.py
 
 pause

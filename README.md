@@ -1,120 +1,120 @@
-# 🧠 AI Tutor: Instant Educational Shorts Generator
+# 🎬 Klipify - AI Educational Video Platform
 
-Transform any YouTube educational video into bite-sized knowledge nuggets! This Streamlit application uses VideoDB for video processing and Google's Gemini model to identify key concepts with timestamped links.
+Transform any YouTube educational video into a comprehensive learning experience using AI-powered video processing and analysis.
 
-## 🚀 Features
+## ✨ Features
 
-- **YouTube Video Processing**: Upload and transcribe any YouTube video
-- **AI-Powered Concept Extraction**: Uses Google Gemini to identify key educational concepts
-- **Smart Video Segmentation**: Finds exact video clips for each concept using semantic search
-- **Timestamped Links**: Generate clickable YouTube links that jump to specific moments
-- **Interactive Study Guide**: Beautiful, user-friendly interface for learning
+- **🎬 Smart Video Clips** - AI-curated educational shorts focusing on key concepts
+- **📋 Intelligent Summaries** - Comprehensive overviews with learning objectives
+- **📝 Timestamped Notes** - Detailed study notes with precise video navigation
+- **💬 AI Study Assistant** - Interactive tutor for personalized learning support
 
-## 🛠️ Tech Stack
+## 🚀 Quick Start
 
-- **Python 3.8+**
-- **Streamlit**: Web application framework
-- **VideoDB SDK**: Video processing and semantic search
-- **Google GenAI**: Google's new Gemini client library (`google-genai`)
+### Prerequisites
+- Python 3.8+
+- API Keys:
+  - [VideoDB API Key](https://console.videodb.io/) (free tier available)
+  - [Google Gemini API Key](https://aistudio.google.com/app/apikey) (free tier available)
 
-## 📋 Prerequisites
+### Installation
 
-1. **VideoDB API Key**: Get your free API key from [VideoDB Console](https://console.videodb.io/)
-2. **Google API Key**: Get your API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-
-## 🔧 Installation
-
-1. **Clone or download this project**
-2. **Install dependencies**:
+1. **Clone and setup**:
    ```bash
+   git clone <repository-url>
+   cd klipify
    pip install -r requirements.txt
    ```
 
-3. **Set up API keys** (choose one method):
-
-   **Method A: Streamlit Secrets (Recommended)**
-   - Create a `.streamlit` folder in the project directory
-   - Copy `secrets_template.toml` to `.streamlit/secrets.toml`
-   - Add your actual API keys:
-     ```toml
-     VIDEODB_API_KEY = "your_actual_videodb_api_key"
-     GEMINI_API_KEY = "your_actual_gemini_api_key"
-     ```
-
-   **Method B: Environment Variables**
-   ```bash
-   set VIDEODB_API_KEY=your_actual_videodb_api_key
-   set GEMINI_API_KEY=your_actual_gemini_api_key
+2. **Configure API keys**:
+   Create `.streamlit/secrets.toml`:
+   ```toml
+   VIDEODB_API_KEY = "your_videodb_api_key"
+   GEMINI_API_KEY = "your_gemini_api_key"
    ```
 
-## 🏃‍♂️ Running the Application
-
-1. **Start the Streamlit app**:
+3. **Run the application**:
    ```bash
-   streamlit run ai_tutor_app.py
+   streamlit run klipify_main.py
+   # Or use the batch file: run_app.bat
    ```
 
-2. **Open your browser** to `http://localhost:8501`
-
-3. **Enter a YouTube URL** and click "Generate Knowledge Nuggets"
-
-## 📱 How to Use
-
-1. **Enter YouTube URL**: Paste any educational YouTube video URL
-2. **Process Video**: The app will:
-   - Upload the video to VideoDB
-   - Generate a transcript
-   - Identify key concepts using Gemini AI
-   - Find relevant video segments
-3. **Get Results**: Receive a list of "Knowledge Nuggets" with clickable timestamps
-
-## 🎯 Example Videos to Try
-
-- Educational lectures
-- Tutorial videos
-- Documentary content
-- How-to guides
-- Academic presentations
-
-## 🔍 How It Works
-
-1. **Video Processing**: VideoDB extracts and transcribes the audio
-2. **Concept Identification**: Gemini AI analyzes the transcript to find key educational concepts
-3. **Semantic Search**: VideoDB finds the exact video segments for each concept
-4. **Result Generation**: Creates timestamped YouTube links for easy navigation
-
-## 🚨 Troubleshooting
-
-**API Key Issues**:
-- Ensure your API keys are valid and active
-- Check that environment variables or secrets are properly set
-
-**Video Processing Errors**:
-- Make sure the YouTube URL is valid and publicly accessible
-- Some videos may have restricted access or copyright protection
-
-**Long Processing Times**:
-- Longer videos take more time to process
-- The transcript generation step can take several minutes for long content
-
-## 📄 File Structure
+## 🏗️ Architecture
 
 ```
-AI Demos July/
-├── ai_tutor_app.py           # Main Streamlit application
-├── requirements.txt          # Python dependencies
-├── secrets_template.toml     # Template for API keys
-└── README.md                # This file
+klipify/
+├── klipify_main.py              # Main application entry point
+├── src/                         # Modular source code
+│   ├── ui/                      # User interface components
+│   │   ├── components.py        # UI elements and styling
+│   │   └── displays.py          # Tab content and layouts
+│   ├── services/                # Business logic services
+│   │   ├── video_service.py     # VideoDB operations
+│   │   └── ai_service.py        # Google GenAI operations
+│   ├── utils/                   # Utility functions
+│   │   └── helpers.py           # Common helper functions
+│   └── processing.py            # Video processing pipeline
+├── assets/                      # Static assets (logos, icons)
+├── requirements.txt             # Python dependencies
+└── run_app.bat                 # Windows launcher script
+```
+
+## 🔧 Usage
+
+1. **Enter YouTube URL** - Paste any educational YouTube video URL
+2. **Process Video** - Click "Process Video" to start AI analysis
+3. **Explore Content**:
+   - **Video Clips** - Watch AI-generated educational shorts
+   - **Summary** - Read comprehensive video analysis
+   - **Notes** - Review timestamped study notes
+   - **Chat** - Ask questions about the video content
+
+## 🛠️ Technical Details
+
+### Dependencies
+- **Streamlit** - Web application framework
+- **VideoDB** - Video processing and indexing
+- **Google GenAI** - AI content generation
+- **Python-dotenv** - Environment configuration
+
+### AI Processing Pipeline
+1. **Video Upload** - Upload to VideoDB for processing
+2. **Content Indexing** - Extract and index spoken words
+3. **AI Analysis** - Generate summaries and extract key concepts
+4. **Segment Detection** - Find relevant video segments
+5. **Clip Generation** - Create focused educational clips
+
+## 🚀 Deployment
+
+### Streamlit Cloud
+1. Push code to GitHub
+2. Connect to [Streamlit Cloud](https://streamlit.io/cloud)
+3. Add secrets in Streamlit Cloud dashboard
+4. Deploy with one click
+
+### Local Production
+```bash
+streamlit run klipify_main.py --server.port 8501
 ```
 
 ## 🤝 Contributing
 
-Feel free to contribute improvements, bug fixes, or new features!
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## 📝 License
 
-This project is for educational and demonstration purposes.
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+- **Issues**: Create a GitHub issue
+- **Documentation**: Check inline code comments
+- **API Docs**: [VideoDB](https://docs.videodb.io/) | [Google GenAI](https://ai.google.dev/gemini-api/docs)
 
 ---
 
-**Built with ❤️ using Streamlit, VideoDB, and Google GenAI**
+**Made with ❤️ for educational content creators and learners**
