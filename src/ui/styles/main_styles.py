@@ -28,9 +28,25 @@ def load_modern_css():
         background: transparent !important;
     }
     
-    /* Global styling */
+    /* Global styling - minimal padding */
     .main > div {
-        padding-top: 0.5rem;
+        padding-top: 0rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+    }
+    
+    /* Reduce space between elements */
+    .element-container {
+        margin-bottom: 0.25rem !important;
+    }
+    
+    /* Remove default Streamlit container padding */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        max-width: none !important;
     }
     
     /* Professional color palette */
@@ -49,26 +65,28 @@ def load_modern_css():
         --accent-blue: #3b82f6;
     }
     
-    /* Landing page hero section - reduced padding */
+    /* Landing page hero section - ultra minimal padding */
     .hero-section {
         background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-        padding: 2rem 2rem 1.5rem 2rem;
+        padding: 1rem 1rem 0.75rem 1rem;
         text-align: center;
         color: white;
-        margin: 0.5rem 0 1rem 0;
+        margin: 0 0 0.5rem 0;
         border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 600;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
         letter-spacing: -0.02em;
     }
     
     .hero-subtitle {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
         opacity: 0.9;
         font-weight: 400;
     }
@@ -101,34 +119,158 @@ def load_modern_css():
         text-decoration: none;
     }
     
-    /* Sidebar navigation styling */
-    .nav-sidebar {
-        background: var(--dark-bg);
-        border: 1px solid var(--border-color);
-        padding: 1rem;
-        margin: 0.5rem 0;
+    /* Modern Sidebar Navigation Styling */
+    
+    /* Reduce overall sidebar padding */
+    .css-1d391kg, [data-testid="stSidebar"] {
+        background-color: var(--darker-bg) !important;
+        border-right: 1px solid var(--border-color) !important;
+        padding-top: 1rem !important;
     }
     
-    .nav-item {
-        background: var(--darker-bg);
+    /* Reduce sidebar content padding */
+    .css-1d391kg .css-1cypcdb, [data-testid="stSidebar"] .css-1cypcdb {
+        padding: 0.5rem 1rem !important;
+    }
+    
+    /* Modern navigation container */
+    .nav-sidebar {
+        background: linear-gradient(145deg, var(--dark-bg), var(--darker-bg));
         border: 1px solid var(--border-color);
-        padding: 0.75rem 1rem;
-        margin: 0.25rem 0;
+        padding: 0.75rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin-bottom: 1rem;
+    }
+    
+    /* Modern navigation title */
+    .nav-title {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0 0 0.75rem 0;
+        text-align: center;
+        background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    /* Modern navigation items */
+    .nav-item {
+        background: linear-gradient(145deg, var(--surface-bg), var(--darker-bg));
+        border: 1px solid var(--border-color);
+        padding: 0.6rem 1rem;
+        margin-bottom: 0.4rem;
         color: var(--text-primary);
         font-weight: 500;
-        transition: all 0.2s ease;
+        font-size: 0.9rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 100%;
         text-align: left;
+        border-radius: 12px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Add subtle gradient overlay on hover */
+    .nav-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+    }
+    
+    .nav-item:hover::before {
+        opacity: 0.1;
     }
     
     .nav-item:hover {
         background: var(--primary-blue);
-        border-color: var(--primary-blue);
+        border-color: var(--accent-blue);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        color: white;
     }
     
     .nav-item.active {
-        background: var(--primary-blue);
-        border-color: var(--secondary-blue);
+        background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+        border-color: var(--accent-blue);
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    }
+    
+    .nav-item.active::before {
+        opacity: 0;
+    }
+    
+    .nav-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    /* Modern sidebar sections */
+    .sidebar-section {
+        background: linear-gradient(145deg, var(--surface-bg), var(--darker-bg));
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar-section h3 {
+        color: var(--text-primary);
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.3rem;
+    }
+    
+    /* Style radio buttons to match the nav design */
+    .stRadio > div {
+        gap: 0.3rem !important;
+    }
+    
+    .stRadio > div > label {
+        background: linear-gradient(145deg, var(--surface-bg), var(--darker-bg)) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 12px !important;
+        padding: 0.6rem 1rem !important;
+        margin-bottom: 0.3rem !important;
+        color: var(--text-primary) !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        cursor: pointer !important;
+    }
+    
+    .stRadio > div > label:hover {
+        background: var(--primary-blue) !important;
+        border-color: var(--accent-blue) !important;
+        color: white !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+    }
+    
+    .stRadio > div > label[data-checked="true"] {
+        background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)) !important;
+        border-color: var(--accent-blue) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4) !important;
+    }
+    
+    /* Hide default radio button circles */
+    .stRadio > div > label > div:first-child {
+        display: none !important;
     }
     
     /* Professional clip cards */
@@ -335,9 +477,28 @@ def load_modern_css():
         transition: all 0.2s ease;
     }
     
+    /* Modern quick action buttons */
+    .stButton > button {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 12px !important;
+        color: white !important;
+        font-weight: 600 !important;
+        padding: 0.6rem 1.2rem !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+    
     .stButton > button:hover {
-        background: var(--secondary-blue);
-        border-color: var(--secondary-blue);
+        background: linear-gradient(145deg, var(--primary-blue), var(--accent-blue)) !important;
+        border-color: var(--accent-blue) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(0) !important;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2) !important;
     }
     
     /* Remove default Streamlit styling */
@@ -346,15 +507,37 @@ def load_modern_css():
     header {visibility: hidden;}
     .stDeployButton {display: none;}
     
-    /* Professional sidebar */
-    .css-1d391kg {
-        background-color: var(--darker-bg);
-        border-right: 1px solid var(--border-color);
+    /* Professional sidebar with reduced padding */
+    .css-1d391kg, [data-testid="stSidebar"] {
+        background-color: var(--darker-bg) !important;
+        border-right: 1px solid var(--border-color) !important;
+        padding-top: 0.5rem !important;
+        min-width: 280px !important;
+        max-width: 320px !important;
     }
     
-    /* Professional main area */
-    .css-18e3th9 {
-        background-color: var(--darker-bg);
+    /* Professional main area with reduced padding */
+    .css-18e3th9, [data-testid="stAppViewContainer"] .main {
+        background-color: var(--darker-bg) !important;
+        padding: 0.5rem !important;
+    }
+    
+    /* Modern scrollbar for sidebar */
+    .css-1d391kg::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .css-1d391kg::-webkit-scrollbar-track {
+        background: var(--darker-bg);
+    }
+    
+    .css-1d391kg::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+    }
+    
+    .css-1d391kg::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-blue);
     }
     
     </style>

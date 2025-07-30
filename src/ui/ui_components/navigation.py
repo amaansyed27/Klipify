@@ -5,16 +5,17 @@ Navigation sidebar component for Klipify.
 import streamlit as st
 
 def create_sidebar_navigation():
-    """Create the professional sidebar navigation and return current page."""
+    """Create the modern sidebar navigation and return current page."""
     
     with st.sidebar:
+        # Modern navigation header
         st.markdown("""
         <div class="nav-sidebar">
-            <h3 style="color: var(--text-primary); margin: 0 0 1rem 0; font-weight: 600;">Navigation</h3>
+            <h3 class="nav-title">🎬 Klipify</h3>
         </div>
         """, unsafe_allow_html=True)
         
-        # Navigation options with professional styling
+        # Navigation options with modern styling
         pages = {
             "🎬 Clips": "Clips",
             "📊 Summary": "Summary", 
@@ -23,22 +24,26 @@ def create_sidebar_navigation():
             "📁 My Videos": "My Videos"
         }
         
-        # Use radio for navigation
+        # Use radio for navigation with custom styling
         selected_page = st.radio(
-            "Select section:",
+            "Navigate to:",
             options=list(pages.keys()),
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key="nav_radio"
         )
         
-        st.markdown("---")
-        
-        # Video statistics
+        # Video info section with modern styling
         video_data = st.session_state.get('video_data', {})
         if video_data:
-            st.markdown("### Video Info")
+            st.markdown("""
+            <div class="sidebar-section">
+                <h3>📺 Video Info</h3>
+            </div>
+            """, unsafe_allow_html=True)
+            
             title = video_data.get('title', 'No title')
-            if len(title) > 30:
-                title = title[:30] + "..."
+            if len(title) > 35:
+                title = title[:35] + "..."
             st.markdown(f"**Title:** {title}")
             
             duration = video_data.get('duration', 0)
@@ -51,21 +56,26 @@ def create_sidebar_navigation():
             if clips_count:
                 st.markdown(f"**Clips:** {clips_count}")
         
-        st.markdown("---")
+        # Status section with modern styling
+        st.markdown("""
+        <div class="sidebar-section">
+            <h3>⚡ Status</h3>
+        </div>
+        """, unsafe_allow_html=True)
         
-        # Status indicator
-        st.markdown("### Status")
         if video_data:
             st.success("✅ Video processed")
             
-            # Quick actions
-            if st.button("🔄 Process New Video", use_container_width=True):
+            # Modern quick actions
+            if st.button("🔄 Process New Video", use_container_width=True, type="secondary"):
                 st.session_state.clear()
                 st.rerun()
                 
         else:
             st.info("📺 No video loaded")
             st.markdown("Upload a video to get started!")
+        
+    return pages[selected_page]
         
     return pages[selected_page]
 
