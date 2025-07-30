@@ -84,15 +84,16 @@ class AIService:
         except Exception as e:
             raise Exception(f"Failed to extract concepts: {str(e)}")
     
-    def generate_timestamped_notes(self, transcript_segments):
+    def generate_timestamped_notes(self, transcript_segments, youtube_id=None):
         """
         Generate detailed timestamped notes from transcript segments.
         
         Args:
             transcript_segments (list): List of transcript segments with timestamps
+            youtube_id (str, optional): YouTube video ID for creating clickable links
             
         Returns:
-            str: Formatted timestamped notes
+            str: Formatted timestamped notes with clickable links
         """
         # Prepare transcript with timestamps for analysis
         timestamped_content = ""
@@ -110,7 +111,9 @@ class AIService:
         3. Important examples or explanations
         4. Action items or takeaways
         
-        Format as markdown with clear headings and bullet points. Include timestamps for easy navigation.
+        Format as markdown with clear headings and bullet points. 
+        For each major section, include the timestamp in format [MM:SS] at the beginning.
+        Make the content educational and easy to study from.
         
         Timestamped transcript:
         {timestamped_content}
@@ -121,9 +124,53 @@ class AIService:
                 model=self.model_name,
                 contents=prompt
             )
-            return response.text
+            
+            # Post-process to add clickable YouTube links if video ID is provided
+            notes = response.text
+            if youtube_id:
+                notes = self._add_youtube_links_to_notes(notes, youtube_id)
+            
+            return notes
+            
         except Exception as e:
             raise Exception(f"Failed to generate notes: {str(e)}")
+    
+    def _add_youtube_links_to_notes(self, notes, youtube_id):
+        """
+        Add clickable YouTube links to timestamp references in notes.
+        
+        Args:
+            notes (str): Original notes with timestamps
+            youtube_id (str): YouTube video ID
+            
+        Returns:
+            str: Notes with clickable timestamp links
+        """
+        import re
+        
+        # Pattern to match timestamps like [12:34] or [01:23]
+        timestamp_pattern = r'\[(\d{1,2}:\d{2})\]'
+        
+        def replace_timestamp(match):
+            timestamp_str = match.group(1)
+            # Convert MM:SS to seconds
+            parts = timestamp_str.split(':')
+            seconds = int(parts[0]) * 60 + int(parts[1])
+            
+            # Create YouTube link with timestamp
+            youtube_link = f"https://www.youtube.com/watch?v={youtube_id}&t={seconds}s"
+            
+            # Return markdown link
+            return f"[🔗 {timestamp_str}]({youtube_link})"
+        
+        # Replace all timestamps with clickable links
+        enhanced_notes = re.sub(timestamp_pattern, replace_timestamp, notes)
+        
+        # Add a note about the clickable timestamps
+        header = "📝 **Study Notes with Clickable Timestamps**\n\n"
+        header += "💡 *Click on any timestamp [🔗 MM:SS] to jump to that moment in the video*\n\n"
+        
+        return header + enhanced_notes
     
     def chat_with_assistant(self, user_message, video_context, chat_history):
         """

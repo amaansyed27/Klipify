@@ -61,7 +61,7 @@ class VideoProcessingPipeline:
             # Step 5: Create Video Clips and Notes
             display_processing_status(5, total_steps, "Creating clips and notes...")
             video_clips = self.video_processor.create_video_clips(concepts_with_segments)
-            timestamped_notes = self.ai_service.generate_timestamped_notes(transcript_segments)
+            timestamped_notes = self.ai_service.generate_timestamped_notes(transcript_segments, youtube_id)
             st.success("🎉 Complete educational package ready!")
             
             # Compile all data
