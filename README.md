@@ -35,7 +35,7 @@ Transform any YouTube educational video into a comprehensive learning experience
 
 3. **Run the application**:
    ```bash
-   streamlit run klipify_main.py
+   streamlit run klipify_new_ui.py
    # Or use the batch file: run_app.bat
    ```
 
